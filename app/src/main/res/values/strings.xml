@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">OnlyKey Set Time</string>
+    <string name="app_desc">Automatically set the plugged Onlykey\'s time when plugged</string>
+</resources>
