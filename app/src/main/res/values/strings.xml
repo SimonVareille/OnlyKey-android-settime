@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">OnlyKey Set Time</string>
     <string name="app_desc">Automatically set the plugged Onlykey\'s time when plugged</string>
+    <string name="button_text">Set time</string>
+    <string name="otp_hint">Test your OTP here</string>
+    <string name="log_label">Log:</string>
 </resources>
