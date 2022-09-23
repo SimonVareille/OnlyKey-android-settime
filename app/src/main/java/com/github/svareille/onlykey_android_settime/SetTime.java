@@ -31,7 +31,7 @@ public class SetTime extends Service {
         DEVICE_IDS.add(new Pair<>(7504, 24828));
     }
 
-    private void setTime() throws IOException {
+    private void setTime() {
         UsbInterface usbInterface = device.getInterface(1);
         UsbEndpoint endpoint = usbInterface.getEndpoint(1);
         UsbManager manager = (UsbManager)getSystemService(USB_SERVICE);
@@ -62,7 +62,7 @@ public class SetTime extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         // The service is starting, due to a call to startService()
 
-        try {
+        if (intent.getAction().equals(UsbEventReceiverActivity.ACTION_USB_DEVICE_ATTACHED)) {
             device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
             if (DEVICE_IDS.contains(new Pair<>(device.getVendorId(), device.getProductId()))) {
                 if (device.getSerialNumber().equals("1000000000")) {
@@ -72,8 +72,6 @@ public class SetTime extends Service {
                     setTime();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         stopSelf();

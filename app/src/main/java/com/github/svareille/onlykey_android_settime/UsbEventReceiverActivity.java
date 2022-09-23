@@ -8,6 +8,8 @@ import android.os.Parcelable;
 
 public class UsbEventReceiverActivity extends Activity
 {
+    public static final String ACTION_USB_DEVICE_ATTACHED = "com.github.svareille.onlykey_android_settime.ACTION_USB_DEVICE_ATTACHED";
+
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -28,7 +30,7 @@ public class UsbEventReceiverActivity extends Activity
 
                 // Create a new intent and put the usb device in as an extra
                 Intent deviceAttachedIntent = new Intent(getApplicationContext(), SetTime.class);
-                //deviceAttachedIntent.setAction(ACTION_USB_DEVICE_ATTACHED);
+                deviceAttachedIntent.setAction(ACTION_USB_DEVICE_ATTACHED);
                 deviceAttachedIntent.putExtra(UsbManager.EXTRA_DEVICE, usbDevice);
                 //deviceAttachedIntent.setClass(this, SetTime.class);
 
