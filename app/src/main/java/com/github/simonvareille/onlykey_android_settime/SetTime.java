@@ -10,17 +10,18 @@ import android.hardware.usb.UsbManager;
 import android.os.IBinder;
 import android.util.Pair;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class SetTime extends Service {
 
     private final ArrayList<Pair<Integer, Integer>> DEVICE_IDS = new ArrayList<>();
 
-    private UsbDevice device;
+    private UsbManager manager;
+    private UsbDevice device = null;
 
     private final Byte[] MESSAGE_HEADER = {(byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff};
 
@@ -34,7 +35,6 @@ public class SetTime extends Service {
     private void setTime() {
         UsbInterface usbInterface = device.getInterface(1);
         UsbEndpoint endpoint = usbInterface.getEndpoint(1);
-        UsbManager manager = (UsbManager)getSystemService(USB_SERVICE);
 
         UsbDeviceConnection connection = manager.openDevice(device);
         connection.claimInterface(usbInterface, true);
@@ -58,20 +58,45 @@ public class SetTime extends Service {
         connection.close();
     }
 
+    /** Check if the provided UsbDevice is an OnlyKey
+     *
+     * @param device The device to check
+     * @return The UsbDevice if an OnlyKey, null otherwise.
+     */
+    private UsbDevice isOnlykey(UsbDevice device) {
+        if (DEVICE_IDS.contains(new Pair<>(device.getVendorId(), device.getProductId()))) {
+            if (device.getSerialNumber().equals("1000000000")) {
+                return device;
+            }
+            else if (device.getInterfaceCount() == 1) {
+                return device;
+            }
+        }
+        return null;
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // The service is starting, due to a call to startService()
 
+        manager = (UsbManager)getSystemService(USB_SERVICE);
+
         if (intent.getAction().equals(UsbEventReceiverActivity.ACTION_USB_DEVICE_ATTACHED)) {
-            device = intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
-            if (DEVICE_IDS.contains(new Pair<>(device.getVendorId(), device.getProductId()))) {
-                if (device.getSerialNumber().equals("1000000000")) {
-                    setTime();
-                }
-                else if (device.getInterfaceCount() == 1) {
-                    setTime();
+            device = isOnlykey(intent.getParcelableExtra(UsbManager.EXTRA_DEVICE));
+        } else if (intent.getAction().equals(MainActivity.ACTION_MANUAL_SET_TIME)) {
+            HashMap<String, UsbDevice> deviceList = manager.getDeviceList();
+            for (UsbDevice usbDevice : deviceList.values()) {
+                UsbDevice device = isOnlykey(usbDevice);
+                if (device != null) {
+                    this.device = device;
+                    break;
                 }
             }
+
+        }
+
+        if (device != null) {
+            setTime();
         }
 
         stopSelf();
