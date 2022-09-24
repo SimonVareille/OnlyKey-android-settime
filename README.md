@@ -20,3 +20,6 @@ thus be used for this, in a convenient interaction-less behaviour.
 
 Now, *OnlyKey Set Time* will be invoked every time an OnlyKey is plugged. The time will be set as
 soon as the key is available, before it is unlocked.
+
+An UI is available to manually set the time of an OnlyKey. This UI also provide an input box where
+to test the OTP. This input box is not linked to anything and doesn't process the data entered.
