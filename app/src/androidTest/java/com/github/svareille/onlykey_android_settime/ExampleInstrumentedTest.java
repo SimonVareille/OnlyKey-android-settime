@@ -1,4 +1,4 @@
-package com.github.svareille.onlykey_android_settime;
+package com.github.svareille.onlykey_settime;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.github.svareille.onlykey_android_settime", appContext.getPackageName());
+        assertEquals("com.github.svareille.onlykey_settime", appContext.getPackageName());
     }
 }

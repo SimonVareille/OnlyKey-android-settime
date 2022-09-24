@@ -1,4 +1,4 @@
-package com.github.svareille.onlykey_android_settime;
+package com.github.svareille.onlykey_settime;
 
 import android.app.Service;
 import android.content.Intent;
