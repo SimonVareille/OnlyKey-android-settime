@@ -1,4 +1,4 @@
-package com.github.simonvareille.onlykey_android_settime;
+package com.github.simonvareille.onlykey_settime;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static final String ACTION_MANUAL_SET_TIME = "com.github.simonvareille.onlykey_android_settime.ACTION_MANUAL_SET_TIME";
+    public static final String ACTION_MANUAL_SET_TIME = "com.github.simonvareille.onlykey_settime.ACTION_MANUAL_SET_TIME";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

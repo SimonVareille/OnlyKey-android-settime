@@ -1,4 +1,4 @@
-package com.github.simonvareille.onlykey_android_settime;
+package com.github.simonvareille.onlykey_settime;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,7 +8,7 @@ import android.os.Parcelable;
 
 public class UsbEventReceiverActivity extends Activity
 {
-    public static final String ACTION_USB_DEVICE_ATTACHED = "com.github.simonvareille.onlykey_android_settime.ACTION_USB_DEVICE_ATTACHED";
+    public static final String ACTION_USB_DEVICE_ATTACHED = "com.github.simonvareille.onlykey_settime.ACTION_USB_DEVICE_ATTACHED";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)

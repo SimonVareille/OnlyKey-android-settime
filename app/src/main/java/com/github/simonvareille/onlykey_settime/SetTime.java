@@ -1,4 +1,4 @@
-package com.github.simonvareille.onlykey_android_settime;
+package com.github.simonvareille.onlykey_settime;
 
 import android.app.Service;
 import android.content.Intent;

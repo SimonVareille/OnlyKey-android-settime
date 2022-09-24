@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "com.github.simonvareille.onlykey_android_settime"
+        applicationId "com.github.simonvareille.onlykey_settime"
         minSdk 21
         targetSdk 31
         versionCode 1
@@ -27,7 +27,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace 'com.github.simonvareille.onlykey_android_settime'
+    namespace 'com.github.simonvareille.onlykey_settime'
 }
 
 dependencies {

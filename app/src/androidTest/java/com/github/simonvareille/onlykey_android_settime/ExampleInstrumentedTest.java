@@ -1,4 +1,4 @@
-package com.github.simonvareille.onlykey_android_settime;
+package com.github.simonvareille.onlykey_settime;
 
 import android.content.Context;
 
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
     public void useAppContext() {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assertEquals("com.github.simonvareille.onlykey_android_settime", appContext.getPackageName());
+        assertEquals("com.github.simonvareille.onlykey_settime", appContext.getPackageName());
     }
 }
