@@ -1,13 +1,18 @@
 package com.github.simonvareille.onlykey_settime;
 
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.usb.UsbDevice;
 import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
 import android.os.IBinder;
+import android.util.Log;
 import android.util.Pair;
 
 import java.nio.ByteBuffer;
@@ -26,6 +31,32 @@ public class SetTime extends Service {
     private final Byte[] MESSAGE_HEADER = {(byte)0xff, (byte)0xff, (byte)0xff, (byte)0xff};
 
     private final Byte OKSETTIME = (byte) 0xe4;
+
+    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+    private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (ACTION_USB_PERMISSION.equals(action)) {
+                synchronized (this) {
+                    UsbDevice device = (UsbDevice)intent.getParcelableExtra(UsbManager.EXTRA_DEVICE);
+
+                    if (intent.getBooleanExtra(UsbManager.EXTRA_PERMISSION_GRANTED, false)) {
+                        if(device != null){
+                            Log.d("usbReceiver.onReceive", "Permission granted");
+                            setTime();
+                            stopService();
+                        }
+                    }
+                    else {
+                        Log.d("usbReceiver.onReceive", "Permission denied for device " + device);
+                        stopService();
+                    }
+                }
+            }
+        }
+    };
+
 
     public SetTime() {
         DEVICE_IDS.add(new Pair<>(5824, 1158));
@@ -95,13 +126,21 @@ public class SetTime extends Service {
 
         }
 
+        PendingIntent permissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
+        registerReceiver(usbReceiver, filter);
+
+
         if (device != null) {
-            setTime();
+            manager.requestPermission(device, permissionIntent);
         }
 
-        stopSelf();
-
         return Service.START_NOT_STICKY;
+    }
+
+    public void stopService() {
+        unregisterReceiver(usbReceiver);
+        stopSelf();
     }
 
     @Override
