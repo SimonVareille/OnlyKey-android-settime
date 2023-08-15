@@ -1,5 +1,6 @@
 package com.github.svareille.onlykey_settime;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -11,6 +12,7 @@ import android.hardware.usb.UsbDeviceConnection;
 import android.hardware.usb.UsbEndpoint;
 import android.hardware.usb.UsbInterface;
 import android.hardware.usb.UsbManager;
+import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
 import android.util.Pair;
@@ -20,6 +22,10 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+
+import androidx.annotation.RequiresApi;
+
+import static android.app.PendingIntent.FLAG_MUTABLE;
 
 public class SetTime extends Service {
 
@@ -32,7 +38,8 @@ public class SetTime extends Service {
 
     private final Byte OKSETTIME = (byte) 0xe4;
 
-    private static final String ACTION_USB_PERMISSION = "com.android.example.USB_PERMISSION";
+    private static final String ACTION_USB_PERMISSION = "com.github.svareille.USB_PERMISSION";
+
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
 
         public void onReceive(Context context, Intent intent) {
@@ -106,6 +113,15 @@ public class SetTime extends Service {
         return null;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private PendingIntent createPermissionIntentSplus() {
+        return PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), FLAG_MUTABLE);
+    }
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private PendingIntent createPermissionIntentOld() {
+        return PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // The service is starting, due to a call to startService()
@@ -126,7 +142,12 @@ public class SetTime extends Service {
 
         }
 
-        PendingIntent permissionIntent = PendingIntent.getBroadcast(this, 0, new Intent(ACTION_USB_PERMISSION), 0);
+        PendingIntent permissionIntent;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            permissionIntent = createPermissionIntentSplus();
+        } else {
+            permissionIntent = createPermissionIntentOld();
+        }
         IntentFilter filter = new IntentFilter(ACTION_USB_PERMISSION);
         registerReceiver(usbReceiver, filter);
 
