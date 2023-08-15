@@ -1,4 +1,4 @@
-package com.github.svareille.onlykey_settime;
+package com.github.svareille.onlykey_android_settime;
 
 import android.content.Context;
 
