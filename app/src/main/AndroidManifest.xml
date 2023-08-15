@@ -26,12 +26,10 @@
         </activity>
         <activity
             android:name=".UsbEventReceiverActivity"
-            android:directBootAware="true"
             android:excludeFromRecents="true"
             android:exported="false"
             android:noHistory="true"
             android:process=":UsbEventReceiverActivityProcess"
-            android:taskAffinity="com.example.taskAffinityUsbEventReceiver"
             android:theme="@style/Theme.Transparent">
             <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_DEVICE_ATTACHED" />
